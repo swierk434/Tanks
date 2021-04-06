@@ -18,6 +18,7 @@ public class MenuFrame extends JFrame implements ActionListener {
 	JPanel panelBlank1;
 	JPanel panelBlank2;
 	JPanel panelTerrain;
+	JPanel pod5, pod4, pod3, pod2, pod1;
 	JLabel title;
 	JLabel podpis1;
 	JTextField par1;
@@ -41,11 +42,17 @@ public class MenuFrame extends JFrame implements ActionListener {
 		par1 = new JTextField("player1");
 		par1.setMaximumSize(new Dimension(800,50));
 		par1.setPreferredSize(new Dimension(800,50));
+		pod1 = new JPanel();
+		pod1.add(podpis1);
 		podpis2 =new JLabel("Player 2");
 		par2 = new JTextField("player2");
 		par2.setMaximumSize(new Dimension(800,50));
 		par2.setPreferredSize(new Dimension(800,50));
+		pod2 = new JPanel();
+		pod2.add(podpis2);
 		podpis3 = new JLabel("Terrain");
+		pod3 = new JPanel();
+		pod3.add(podpis3);
 		///3
 			panelTerrain = new JPanel(new GridLayout(1,3));
 			panelTerrain.setMaximumSize(new Dimension(800,50));
@@ -62,7 +69,11 @@ public class MenuFrame extends JFrame implements ActionListener {
 		par4 = new JSlider(JSlider.HORIZONTAL, 1, 5, 3);
 		par4.setMaximumSize(new Dimension(800,50));
 		par4.setPreferredSize(new Dimension(800,50));
+		pod4 = new JPanel();
+		pod4.add(podpis4);
 		podpis5 =new JLabel("Starting tanks hit points");
+		pod5 = new JPanel();
+		pod5.add(podpis5);
 		par5 = new JSlider(JSlider.HORIZONTAL, 10, 100, 50);
 		par5.setMaximumSize(new Dimension(800,50));
 		par5.setPreferredSize(new Dimension(800,50));
@@ -91,23 +102,23 @@ public class MenuFrame extends JFrame implements ActionListener {
 			panelSetUp.setLayout(new BoxLayout(panelSetUp, BoxLayout.Y_AXIS));
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 10)));
 			panelSetUp.setBorder(title1);
-			panelSetUp.add(podpis1);
+			panelSetUp.add(pod1);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 15)));
 			panelSetUp.add(par1);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 30)));
-			panelSetUp.add(podpis2);
+			panelSetUp.add(pod2);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 15)));
 			panelSetUp.add(par2);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 30)));
-			panelSetUp.add(podpis3);
+			panelSetUp.add(pod3);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 15)));
 			panelSetUp.add(panelTerrain);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 30)));
-			panelSetUp.add(podpis4);
+			panelSetUp.add(pod4);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 15)));
 			panelSetUp.add(par4);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 30)));
-			panelSetUp.add(podpis5);
+			panelSetUp.add(pod5);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 15)));
 			panelSetUp.add(par5);
 			

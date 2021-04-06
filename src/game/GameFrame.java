@@ -50,7 +50,15 @@ public class GameFrame extends JFrame implements ActionListener {
 		ammuP = new JPanel();
 		
 		velocity = new JSlider(JSlider.HORIZONTAL, 0, 30, 5);
-		angle = new JSlider(JSlider.HORIZONTAL);
+		angle = new JSlider(JSlider.HORIZONTAL,-90, 90 , 0);
+		velocity.setMajorTickSpacing(10);
+		velocity.setMinorTickSpacing(1);
+		velocity.setPaintTicks(true);
+		velocity.setPaintLabels(true);
+		angle.setMajorTickSpacing(30);
+		angle.setMinorTickSpacing(5);
+		angle.setPaintTicks(true);
+		angle.setPaintLabels(true);
 		moveLeft = new JButton("<");
 		moveRight = new JButton(">");
 		ammunition = new JComboBox<String>(choose);
