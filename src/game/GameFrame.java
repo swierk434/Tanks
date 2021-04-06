@@ -116,8 +116,8 @@ public class GameFrame extends JFrame implements ActionListener {
 		
 		this.setMinimumSize(new Dimension(600, 450));
 		this.setBounds(100, 100, 1080, 720);
-		this.setTitle("I love coding <3");
-		this.pack();
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setTitle("Tanks");
 		this.setPreferredSize(new Dimension(1080, 720));
 		this.setSize(1080,720);	
 		
