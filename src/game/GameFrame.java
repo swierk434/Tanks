@@ -12,6 +12,7 @@ import javax.swing.border.TitledBorder;
 public class GameFrame extends JFrame implements ActionListener {
 
 	String[] choose;
+	GameFrame pointer;
 	JMenuBar menuBar;
 	JMenu menu;
 	JMenuItem menuItem1, menuItem2, menuItem3;
@@ -22,7 +23,8 @@ public class GameFrame extends JFrame implements ActionListener {
 	JPanel velocityP;
 	JPanel angleP;
 	JPanel ammuP;
-	
+	JMenuItem menuitem1, menuitem2;
+	JMenuBar menubar;
 	JSlider velocity;
 	JSlider angle;
 	JButton moveLeft;
@@ -35,6 +37,8 @@ public class GameFrame extends JFrame implements ActionListener {
 	public GameFrame() throws HeadlessException {
 	
 		String[] choose = {"pierwsza", "druga", "trzecia", "czwarta"};
+		
+		pointer = this;
 		menuBar = new JMenuBar();
 		menu = new JMenu("Options");
 		
@@ -54,13 +58,28 @@ public class GameFrame extends JFrame implements ActionListener {
 		TitledBorder title1, title2, title3, title4;
 		Border blackline = BorderFactory.createLineBorder(Color.black);	
 		
-		//jakiœ layout nwm jaki jeszcze	
-		this.setLayout(new SpringLayout());
-		this.add(panelCenter);
-		panelCenter.setSize(new Dimension(1080, 500));
-		this.add(panelDown);
 		
+		
+		//jakiœ layout nwm jaki jeszcze	
+		this.setLayout(new BorderLayout());
+		this.add(panelCenter, BorderLayout.CENTER);
+		panelCenter.setSize(new Dimension(1080, 520));
+		this.add(panelDown, BorderLayout.SOUTH);
+		
+		
+		//menu
+		menubar = new JMenuBar();
+		menu = new JMenu("Exit");
+	//	menuitem1 = new JMenuItem("Open");
+	//	menuitem2 = new JMenuItem("Save");
+	//	menu.add(menuitem1);
+	//	menu.add(menuitem2);
+		menubar.add(menu);
+		this.setJMenuBar(menubar);
+		
+		//reszta
 		panelDown.setLayout(new GridLayout(1,4));
+		panelDown.setPreferredSize(new Dimension (pointer.getWidth(), 80));
 		panelDown.add(movementP);
 		movementP.add(moveLeft);
 		movementP.add(moveRight);

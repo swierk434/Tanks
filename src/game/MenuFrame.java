@@ -36,7 +36,7 @@ public class MenuFrame extends JFrame implements ActionListener {
 		panelDown = new JPanel();
 		panelBlank1 = new JPanel();
 		panelBlank2 = new JPanel();
-		title = new JLabel("Tanks - Computer Games");
+		title = new JLabel("Tanks - Computer Game");
 		podpis1 =new JLabel("Player 1");
 		par1 = new JTextField("player1");
 		par1.setMaximumSize(new Dimension(800,50));
