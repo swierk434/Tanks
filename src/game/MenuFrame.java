@@ -146,13 +146,6 @@ public class MenuFrame extends JFrame implements ActionListener {
 		this.setMinimumSize(this.getPreferredSize());
 	}
 
-	public static void main(String[] args) {
-		MenuFrame frame1 = new MenuFrame();
-		frame1.setVisible(true);
-		GameFrame frame2 = new GameFrame();
-		frame2.setVisible(true);
-	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
