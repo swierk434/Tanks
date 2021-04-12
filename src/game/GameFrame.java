@@ -3,14 +3,20 @@ package game;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements ActionListener {
 
+	int angleV, velocityV;
+	String ammu;
 	String[] choose;
 	GameFrame pointer;
 	JMenuBar menuBar;
@@ -18,17 +24,12 @@ public class GameFrame extends JFrame implements ActionListener {
 	JMenuItem menuItem1, menuItem2, menuItem3;
 	
 	JPanel panelDown;
-	JPanel panelCenter; //to bd panel z plansza, pewnie jako osobna klasa
-	JPanel movementP;
-	JPanel velocityP;
-	JPanel angleP;
-	JPanel ammuP;
+	JPanel panelCenter, movementP, velocityP, angleP, ammuP;
 	JMenuItem menuitem1, menuitem2;
 	JMenuBar menubar;
 	JSlider velocity;
 	JSlider angle;
-	JButton moveLeft;
-	JButton moveRight;
+	JButton moveLeft,moveRight;
 	JComboBox<String> ammunition;
 	
 	TitledBorder title1, title2, title3, title4;
@@ -66,9 +67,7 @@ public class GameFrame extends JFrame implements ActionListener {
 		TitledBorder title1, title2, title3, title4;
 		Border blackline = BorderFactory.createLineBorder(Color.black);	
 		
-		
-		
-		//jakiœ layout nwm jaki jeszcze	
+			
 		this.setLayout(new BorderLayout());
 		this.add(panelCenter, BorderLayout.CENTER);
 		panelCenter.setSize(new Dimension(1080, 520));
@@ -103,12 +102,25 @@ public class GameFrame extends JFrame implements ActionListener {
 		velocityP.setBorder(title2);
 		panelDown.add(angleP);
 		angleP.add(angle);
+		angle.addChangeListener(new ChangeListener () {
+			
+			public void stateChanged(ChangeEvent e) {
+				angleV = angle.getValue();
+			}
+		});
 		
 		title3 = BorderFactory.createTitledBorder(blackline, "Angle");   
 		title3.setTitleJustification(TitledBorder.CENTER);
 		angleP.setBorder(title3);
 		panelDown.add(ammuP);
 		ammuP.add(ammunition);
+		ammunition.addItemListener(new ItemListener () {
+
+			public void itemStateChanged(ItemEvent e) {
+				
+			}
+			
+		});
 		
 		title4 = BorderFactory.createTitledBorder(blackline, "Ammunition");
 		title4.setTitleJustification(TitledBorder.CENTER);

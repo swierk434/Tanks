@@ -7,26 +7,26 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 @SuppressWarnings("serial")
 public class MenuFrame extends JFrame implements ActionListener {
 
-	JPanel panelSetUp;
-	JPanel panelUp;
-	JPanel panelDown;
-	JPanel panelBlank1;
-	JPanel panelBlank2;
+	String player1, player2, terrain;
+	int number_tanks, life; 
+	JPanel panelSetUp, panelUp, panelDown;
+	JPanel panelBlank1, panelBlank2;
 	JPanel panelTerrain;
 	JPanel pod5, pod4, pod3, pod2, pod1;
 	JLabel title;
-	JLabel podpis1;
-	JTextField par1;
-	JLabel podpis2;
-	JTextField par2;
+	JLabel podpis1, podpis2;
+	JTextField par1, par2;
 	JLabel podpis3, podpis4, podpis5;
 	JSlider par4, par5;
-	JButton start, terrain1, terrain2, terrain3;
+	JButton start;
+	JRadioButton terrain1, terrain2, terrain3;
 	TitledBorder title1;
 	Border blackline;
 	
@@ -42,12 +42,26 @@ public class MenuFrame extends JFrame implements ActionListener {
 		par1 = new JTextField("player1");
 		par1.setMaximumSize(new Dimension(800,50));
 		par1.setPreferredSize(new Dimension(800,50));
+		par1.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				player1 = par1.getText();
+			}
+		});
+		
 		pod1 = new JPanel();
 		pod1.add(podpis1);
 		podpis2 =new JLabel("Player 2");
 		par2 = new JTextField("player2");
 		par2.setMaximumSize(new Dimension(800,50));
 		par2.setPreferredSize(new Dimension(800,50));
+		par2.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				player2 = par2.getText();
+			}
+		});
+		
 		pod2 = new JPanel();
 		pod2.add(podpis2);
 		podpis3 = new JLabel("Terrain");
@@ -57,9 +71,16 @@ public class MenuFrame extends JFrame implements ActionListener {
 			panelTerrain = new JPanel(new GridLayout(1,3));
 			panelTerrain.setMaximumSize(new Dimension(800,50));
 			panelTerrain.setPreferredSize(new Dimension(800,50));
-			terrain1 = new JButton("Flat"); 
-			terrain2 = new JButton("Hills"); 
-			terrain3 = new JButton("Mountains");
+			terrain1 = new JRadioButton("Flat"); 
+			terrain2 = new JRadioButton("Hills"); 
+			terrain3 = new JRadioButton("Mountains");
+			ButtonGroup group = new ButtonGroup();
+			group.add(terrain1);
+			group.add(terrain2);
+			group.add(terrain3);
+			terrain1.addActionListener(buttonListener);
+			terrain2.addActionListener(buttonListener);
+			terrain3.addActionListener(buttonListener);
 			panelTerrain.add(terrain1);
 			panelTerrain.add(terrain3);
 			panelTerrain.add(terrain2);
@@ -69,6 +90,13 @@ public class MenuFrame extends JFrame implements ActionListener {
 		par4 = new JSlider(JSlider.HORIZONTAL, 1, 5, 3);
 		par4.setMaximumSize(new Dimension(800,50));
 		par4.setPreferredSize(new Dimension(800,50));
+		par4.addChangeListener(new ChangeListener () {
+			
+			public void stateChanged(ChangeEvent e) {
+				number_tanks = par4.getValue();
+			}
+		});
+		
 		pod4 = new JPanel();
 		pod4.add(podpis4);
 		podpis5 =new JLabel("Starting tanks hit points");
@@ -77,7 +105,15 @@ public class MenuFrame extends JFrame implements ActionListener {
 		par5 = new JSlider(JSlider.HORIZONTAL, 10, 100, 50);
 		par5.setMaximumSize(new Dimension(800,50));
 		par5.setPreferredSize(new Dimension(800,50));
+		par5.addChangeListener(new ChangeListener () {
+			
+			public void stateChanged(ChangeEvent e) {
+				life = par5.getValue();
+			}
+		});
+		
 		start = new JButton("Start");
+		start.addActionListener(this);
 		title1 = new TitledBorder("Game parameters");
 		blackline = BorderFactory.createLineBorder(Color.black);
 	
@@ -140,16 +176,20 @@ public class MenuFrame extends JFrame implements ActionListener {
 			
 		this.setTitle("Parametry gry");
 		this.setBackground(new Color(204, 255, 204));
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setPreferredSize(new Dimension(1080, 720));
 		this.setMaximumSize(this.getPreferredSize());
 		this.setMinimumSize(this.getPreferredSize());
 	}
+	
+	ActionListener buttonListener = new ActionListener() {
 
+		public void actionPerformed(ActionEvent e) {
+			terrain = ((JRadioButton) e.getSource()).getText();
+		}
+	};
 
-	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
