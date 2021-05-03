@@ -24,7 +24,8 @@ public class GameFrame extends JFrame implements ActionListener {
 	JMenuItem menuItem1, menuItem2, menuItem3;
 	
 	JPanel panelDown;
-	JPanel panelCenter, movementP, velocityP, angleP, ammuP;
+	JPanel movementP, velocityP, angleP, ammuP;
+	Panel panelCenter;
 	JMenuItem menuitem1, menuitem2;
 	JMenuBar menubar;
 	JSlider velocity;
@@ -35,16 +36,19 @@ public class GameFrame extends JFrame implements ActionListener {
 	TitledBorder title1, title2, title3, title4;
 	Border blackline;
 	
+	Map map;
+	
 	public GameFrame() throws HeadlessException {
 	
 		String[] choose = {"pierwsza", "druga", "trzecia", "czwarta"};
 		
+		map = new Map();
 		pointer = this;
 		menuBar = new JMenuBar();
 		menu = new JMenu("Options");
 		
 		panelDown = new JPanel();
-		panelCenter = new JPanel(); //to bd panel z plansza, pewnie jako osobna klasa
+		panelCenter = new Panel(map); //to bd panel z plansza, pewnie jako osobna klasa
 		movementP = new JPanel();
 		velocityP = new JPanel();
 		angleP = new JPanel();
