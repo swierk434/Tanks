@@ -1,8 +1,5 @@
 package game;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -26,7 +23,7 @@ public class Main{
 			public void run() {
 			GameFrame frame1 = new GameFrame();
 			frame1.setVisible(true);	
-			MenuFrame frame2 = new MenuFrame();
+			//MenuFrame frame2 = new MenuFrame();
 			//frame2.setVisible(true);
 			Thread t1 = new Thread(frame1);
 			t1.start();

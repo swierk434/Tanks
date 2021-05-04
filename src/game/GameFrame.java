@@ -15,7 +15,7 @@ import javax.swing.event.ChangeListener;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements Runnable{
 	
-	int angleV, velocityV;
+	int angleV, velocityV, ammo = 0;
 	double Vx, Vy; // Vx = Math.cos(Math.toRadians(angleV))*velocityV  Vy = Math.sin(Math.toRadians(angleV))*velocityV
 	String ammu;
 	String[] choose;
@@ -41,9 +41,7 @@ public class GameFrame extends JFrame implements Runnable{
 
 	
 	public GameFrame() throws HeadlessException {
-	
 		String[] choose = {"pierwsza", "druga", "trzecia", "czwarta"};
-		
 		
 		map = new Map();
 		pointer = this;
@@ -59,9 +57,10 @@ public class GameFrame extends JFrame implements Runnable{
 		shotP = new JPanel();
 		
 		angleV = 0; 
-		velocityV = 5;
+		velocityV = 10;
+		ammo = 0;
 		
-		velocity = new JSlider(JSlider.HORIZONTAL, 0, 30, 5);
+		velocity = new JSlider(JSlider.HORIZONTAL, 10, 30, 10);
 		angle = new JSlider(JSlider.HORIZONTAL,-90, 90 , 0);
 		velocity.setMajorTickSpacing(10);
 		velocity.setMinorTickSpacing(1);
@@ -85,6 +84,8 @@ public class GameFrame extends JFrame implements Runnable{
 		this.setLayout(new BorderLayout());
 		this.add(panelCenter, BorderLayout.CENTER);
 		panelCenter.setSize(new Dimension(1080, 520));
+		panelCenter.setMaximumSize(new Dimension(1080, 520));
+		panelCenter.setMinimumSize(new Dimension(1080, 520));
 		this.add(panelDown, BorderLayout.SOUTH);
 		
 		
@@ -149,7 +150,8 @@ public class GameFrame extends JFrame implements Runnable{
 		ammunition.addItemListener(new ItemListener () {
 
 			public void itemStateChanged(ItemEvent e) {
-				
+				ammo = ammunition.getSelectedIndex();
+				pointer.panelCenter.repaint();
 			}
 			
 		});
@@ -162,7 +164,7 @@ public class GameFrame extends JFrame implements Runnable{
 		shotP.add(shot);
 		shot.addActionListener(new ActionListener () {
 			public void actionPerformed(ActionEvent e){
-				
+			
 			}
 		});
 		title5 = BorderFactory.createTitledBorder(blackline, "Action");
@@ -180,18 +182,16 @@ public class GameFrame extends JFrame implements Runnable{
 
 	@Override
 	public void run() {
-		int t;
+		Explosion exp;
+		int t, radius = 30;
 		double dt = 0.05;
 		double time;
 		int round = 0;
-		  while(true){ 
+		  while(round <= 10){ 
 			  t = 0;
 			  //System.out.println("1");
-			  map.tanks[round%2].updatePosRight();
-			  map.tanks[round%2].updatePosRight();
-			  map.tanks[round%2].updatePosRight();
-			  map.tanks[round%2].updatePosRight();
 			  while(t < 1000*10) {
+				  
 				   if(moveLeft.getModel().isPressed()) {
 					   map.tanks[round%2].updatePosLeft();
 				   }
@@ -199,8 +199,8 @@ public class GameFrame extends JFrame implements Runnable{
 					   map.tanks[round%2].updatePosRight();
 				   }
 				   try {
-					   Thread.sleep(50);
-					   t += 50;
+					   Thread.sleep(20);
+					   t += 20;
 				   } 
 				   catch (InterruptedException e) {
 					   e.printStackTrace();
@@ -210,7 +210,7 @@ public class GameFrame extends JFrame implements Runnable{
 					   map.addProjectile(map.tanks[round%2].xPos,map.tanks[round%2].yPos,Vx = Math.sin(Math.toRadians(angleV))*velocityV/3,Vy = Math.cos(Math.toRadians(angleV))*velocityV/3);
 					   time = 0;
 					   while(map.projectileIsValid()==true) {
-						   //System.out.println(time + " " + map.p1.xPos);
+						//   System.out.println(map.tanks[0].xPos + " " + map.tanks[1].xPos);
 						   map.p1.updatePos(time, dt);
 						   try {
 							   Thread.sleep(1);
@@ -224,8 +224,47 @@ public class GameFrame extends JFrame implements Runnable{
 					   map.p1 = null;
 					   break;
 				   }
+				   if(map.colisionX != null) {
+					   radius = 0;
+					   exp = new Explosion(1,1,true);
+					   if(ammo == 0) exp = new Explosion(30, 5, true);
+					   if(ammo == 1) exp = new Explosion(100, 20, true);
+					   if(ammo == 2) exp = new Explosion(50, 10, false);
+					   if(ammo == 3) exp = new Explosion(150, 25, false);
+					   map.destructive = exp.destructive;
+					   if(exp.destructive == true) {
+						   while(exp.radius > 0) {
+						   map.radius = exp.radius;
+						   try {
+							   Thread.sleep(100);
+						   } 
+						   catch (InterruptedException e) {
+							   e.printStackTrace();
+						   }
+						   pointer.panelCenter.repaint();
+						   exp.radius -= exp.delay;
+						   }
+					   }
+					   if(exp.destructive == false) {
+						   while(radius < exp.radius) {
+							   map.radius = radius;
+							   try {
+								   Thread.sleep(100);
+							   } 
+							   catch (InterruptedException e) {
+								   e.printStackTrace();
+							   }
+							   pointer.panelCenter.repaint();
+							   radius+=exp.delay;
+							   }
+					   }
+					   
+					   map.colisionX = null;
+					   map.colisionY = null;
+				   }
 			  }
-			 round++;
+			pointer.panelCenter.repaint();
+			round++;
 		  }
 	}
 
