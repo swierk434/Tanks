@@ -12,8 +12,9 @@ import javax.swing.event.ChangeListener;
 
 
 @SuppressWarnings("serial")
-public class MenuFrame extends JFrame implements ActionListener {
+public class MenuFrame extends JFrame{
 
+	GameFrame pointer;
 	String player1, player2, terrain;
 	int number_tanks, life; 
 	JPanel panelSetUp, panelUp, panelDown;
@@ -30,8 +31,14 @@ public class MenuFrame extends JFrame implements ActionListener {
 	TitledBorder title1;
 	Border blackline;
 	
+	void setPointer(GameFrame g){
+		pointer = g;
+	}
+	
+	
 	public MenuFrame() throws HeadlessException {
 		
+		//pointer = this;
 		panelSetUp  = new JPanel();
 		panelUp = new JPanel();
 		panelDown = new JPanel();
@@ -111,9 +118,13 @@ public class MenuFrame extends JFrame implements ActionListener {
 				life = par5.getValue();
 			}
 		});
-		
+
 		start = new JButton("Start");
-		start.addActionListener(this);
+		start.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e){
+				
+			}
+		});
 		title1 = new TitledBorder("Game parameters");
 		blackline = BorderFactory.createLineBorder(Color.black);
 	
@@ -188,9 +199,4 @@ public class MenuFrame extends JFrame implements ActionListener {
 			terrain = ((JRadioButton) e.getSource()).getText();
 		}
 	};
-
-	public void actionPerformed(ActionEvent e) {
-		
-	}
-
 }
