@@ -31,9 +31,5 @@ public class Panel extends JPanel {
 			g2d.drawImage(image, 0, 0, this);		
 			map.drawmap(g2d);
 		}
-		//if(map.p1 != null) {
-		//	g.setColor(Color.white);
-		//	g.fillOval(map.p1.getX(),520 - map.p1.getY(),4,4);
-		//}
 	}
 	

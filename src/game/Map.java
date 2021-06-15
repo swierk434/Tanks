@@ -21,6 +21,7 @@ public class Map {
 	String timers;
 	Integer player;
 	String players;
+	String winners;
 	
 	public class Tank {
 		int xPos, yPos, team; 
@@ -48,7 +49,7 @@ public class Map {
 			xPos -=1;
 		}
 		public void moveRight() {
-		if(xPos >= 1 && xPos <= 1078 && yPos >= 1 && yPos <= 518) {
+		if(xPos >= 5 && xPos <= 1074 && yPos >= 1 && yPos <= 518) {
 			if(tab[xPos+1][yPos+1]==false) {
 				int tmp = yPos+1;
 				while(tab[xPos+1][tmp] == false && tmp >= 0) {
@@ -60,7 +61,7 @@ public class Map {
 			}
 		}
 		public void moveLeft() {
-			if(xPos >= 1 && xPos <= 1078 && yPos >= 1 && yPos <= 518) {
+			if(xPos >= 6 && xPos <= 1075 && yPos >= 1 && yPos <= 518) {
 				if(tab[xPos-1][yPos+1]==false) {
 					int tmp = yPos+1;
 					while(tab[xPos-1][tmp] == false && tmp > 0) {
@@ -140,21 +141,26 @@ public class Map {
 			if(t.team == 1) {
 				if(t.HP > 0) {
 					tmp1 = true; 
+					//System.out.println("team1");
 				}
 			}
 			if(t.team == 2) {
 				if(t.HP > 0) {
-					tmp2 = true; 
+					tmp2 = true;
+					//System.out.println("team2");
 				}
 			}
 		}
 		//if(tmp1 == true) System.out.println("tmp1 = true"); 
 		//if(tmp2 == true) System.out.println("tmp2 = true");
 		//if(tmp2 == false) System.out.println("tmp2 = false");
-		if(tmp1 == tmp2 == true) {
+		if(tmp1 == true && tmp2 == true) {
 			return false;
 		}
 		else {
+			if(tmp1 == true)winner = 1;
+			if(tmp2 == true)winner = 2;
+			if(tmp1 == false && tmp2 == false)winner = 0;
 			return true;
 		}
 	}
@@ -168,7 +174,7 @@ public class Map {
 		if(p1.getX() >= 0 && p1.getX() <= 1079 && p1.getY() >= 0 && p1.getY() <= 519 ) {
 			if(tab[p1.getX()][p1.getY()] == true) {
 			output = false;
-			colisionX = p1.getX();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!????
+			colisionX = p1.getX();
 			colisionY = p1.getY();
 			//System.out.println(colisionX + " " + colisionY);
 			}
@@ -182,7 +188,7 @@ public class Map {
 	public Map(String player1, String player2, String terrain, int number_tanks, int life) {
 		Player1 = player1;
 		Player2 = player2;
-		System.out.println(player1 +" "+ player2);
+		//System.out.println(player1 +" "+ player2);
 		player = 1;
 		timer = 10;
 		winner = null;
@@ -291,11 +297,30 @@ public class Map {
 			}	
 		}
 		timers = "Time Left: "+ timer.toString();
-		g2d.setColor(Color.white);
-		g2d.drawString(timers, 10 , 15);
-		if(player == 1)players = "Round: "+ Player1;
-		if(player == 2)players = "Round: "+ Player2;
-		g2d.setColor(Color.white);
-		g2d.drawString(players, 10 , 30);
+		if(winner == null) {
+			g2d.setColor(Color.white);
+			g2d.drawString(timers, 10 , 15);
+			if(player == 1)players = "Round: "+ Player1;
+			if(player == 2)players = "Round: "+ Player2;
+			g2d.setColor(Color.white);
+			g2d.drawString(players, 10 , 30);
+		}
+		if(winner != null) {
+			if(winner == 1) {
+				winners = Player1 + " won!";
+				g2d.setColor(Color.white);
+				g2d.drawString(winners, 10 , 30);
+			}
+			if(winner == 2) {
+				winners = Player2 + " won!";
+				g2d.setColor(Color.white);
+				g2d.drawString(winners, 10 , 30);
+			}
+			if(winner == 0) {
+				winners = "Draw";
+				g2d.setColor(Color.white);
+				g2d.drawString(winners, 10 , 30);
+			}
+		}
 	}
 }

@@ -213,17 +213,19 @@ public class GameFrame extends JFrame implements Runnable{
 			  t = 0;
 			 // System.out.println(round);
 			  map.player = (round%2) +1;
-			  while(t < 1000*10) {
+			  while(t < 1000*30) {
 				  if(map.tanks[round%(number*2)].HP <= 0) {
-					  System.out.println(round%(number*2)+ " " +map.tanks[round%(number*2)].HP);
-					   break;
+					 // System.out.println(round%(number*2)+ " " +map.tanks[round%(number*2)].HP);
+					 break;
 				   }
-				  map.timer = 10 - (int)t/1000;
+				  map.timer = 30 - (int)t/1000;
 				   if(moveLeft.getModel().isPressed()) {
 					   map.tanks[round%(number*2)].moveLeft();
+					   //System.out.println(map.tanks[round%(number*2)].xPos + " " + map.tanks[round%(number*2)].yPos);
 				   }
 				   if(moveRight.getModel().isPressed()) {
 					   map.tanks[round%(number*2)].moveRight();
+					   //System.out.println(map.tanks[round%(number*2)].xPos + " " + map.tanks[round%(number*2)].yPos);
 				   }
 				   try {
 					   Thread.sleep(20);
@@ -331,6 +333,12 @@ public class GameFrame extends JFrame implements Runnable{
 			   
 			round++;
 		  }
+		  try {
+			   pointer.panelCenter.repaint();  
+			   }
+			   catch(Exception e) {
+				   
+			   }
 	}
 
 }

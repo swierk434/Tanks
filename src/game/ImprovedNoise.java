@@ -47,10 +47,4 @@ public final class ImprovedNoise {
 	   };
 	   static { for (int i=0; i < 256 ; i++) p[256+i] = p[i] = permutation[i]; }
 	   
-	   public static void main(String[] args) {
-		 //  ImprovedNoise n1 = new ImprovedNoise();
-		   for (double n = 1000; n < 1010; n+= 0.01) {
-			   System.out.println(ImprovedNoise.noise(n,n,n));
-		   } 
-	   }
 	}
