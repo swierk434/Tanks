@@ -2,8 +2,10 @@ package game;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Random;
 
 public class Map {
+	Random rand;
 	Projectile p1;
 	boolean tab[][];
 	boolean destructive;
@@ -11,13 +13,22 @@ public class Map {
 	int flatlevel;
 	Tank tanks[];
 	Integer colisionX, colisionY, radius;
+	Graphics2D mapgc;
+	Integer winner;
+	int n1, n2, n3;
 	
 	public class Tank {
-		int xPos, yPos, team;
+		int xPos, yPos, team; 
+		Integer HP;
 		
 		public Tank(int x, int y, int t){
 			xPos = x; 
-			yPos = y;
+			HP = y;
+			int tmp = 519;
+			while(tab[xPos][tmp] == false && tmp >= 0) {
+				tmp--;
+			}
+			yPos = tmp +1;
 			team = t;
 		}
 		
@@ -31,6 +42,30 @@ public class Map {
 		public void updatePosLeft() {
 			xPos -=1;
 		}
+		public void moveRight() {
+		if(xPos >= 1 && xPos <= 1078 && yPos >= 1 && yPos <= 518) {
+			if(tab[xPos+1][yPos+1]==false) {
+				int tmp = yPos+1;
+				while(tab[xPos+1][tmp] == false && tmp >= 0) {
+					tmp--;
+				}
+				yPos = tmp+1;
+				xPos++;
+				}
+			}
+		}
+		public void moveLeft() {
+			if(xPos >= 1 && xPos <= 1078 && yPos >= 1 && yPos <= 518) {
+				if(tab[xPos-1][yPos+1]==false) {
+					int tmp = yPos+1;
+					while(tab[xPos-1][tmp] == false && tmp > 0) {
+						tmp--;
+					}
+					yPos = tmp+1;
+					xPos--;
+					}
+				}
+			}
 	}
 	public class Projectile{
 		public static final double g = 0.1;
@@ -57,6 +92,68 @@ public class Map {
 			return (int)yPos;
 		}
 	}
+	
+	public double r(int x1, int y1, int x0, int y0){
+		return Math.sqrt((double)(x1-x0)*(x1-x0)+(double)(y1-y0)*(y1-y0));
+	}
+	
+	public void removeTerrain(Integer x, Integer y, int radius) {
+		for(int n = x - radius; n <= x + radius; n++) {
+			for(int m = y - radius; m <= y + radius; m++) {
+				if(r(n,m,x,y) <= (double)radius) {
+				//	System.out.println(n + " " + m);
+					try{
+						tab[n][m]=false;
+					}
+					catch(Exception e) {
+						
+					}
+				}
+			}	
+		}
+	}
+	public void fall() {
+		for (Tank t : tanks) {
+				while(tab[t.xPos][t.yPos-1] == false && t.yPos >= 2) {
+					t.yPos--;
+				}
+			}
+	}
+	public void damage(int xx, int yy, int dmg, int rad) {
+		for (Tank t : tanks) {
+			//System.out.println((int)r(t.xPos,t.yPos,xx,yy) + " " + rad + " " + dmg);
+			if(r(t.xPos,t.yPos,xx,yy) <= rad) {
+				t.HP -= (int)((1-r(t.xPos,t.yPos,xx,yy)/rad) * dmg);
+				//System.out.println(t.HP);
+			}
+		}
+	}
+	
+	public boolean end() {
+		boolean tmp1 = false, tmp2 = false;
+		for (Tank t : tanks) {
+			if(t.team == 1) {
+				if(t.HP > 0) {
+					tmp1 = true; 
+				}
+			}
+			if(t.team == 2) {
+				if(t.HP > 0) {
+					tmp2 = true; 
+				}
+			}
+		}
+		//if(tmp1 == true) System.out.println("tmp1 = true"); 
+		//if(tmp2 == true) System.out.println("tmp2 = true");
+		//if(tmp2 == false) System.out.println("tmp2 = false");
+		if(tmp1 == tmp2 == true) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
+	
 	public void addProjectile(int x, int y, double vx, double vy) {
 		p1 = new Projectile(x,y,vx,vy);
 	}
@@ -66,45 +163,67 @@ public class Map {
 		if(p1.getX() >= 0 && p1.getX() <= 1079 && p1.getY() >= 0 && p1.getY() <= 519 ) {
 			if(tab[p1.getX()][p1.getY()] == true) {
 			output = false;
-			colisionX = p1.getX();
+			colisionX = p1.getX();//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!????
 			colisionY = p1.getY();
 			//System.out.println(colisionX + " " + colisionY);
 			}
 		}
-		if(p1.xPos < 0 || p1.xPos > 1079) output = false;
+		if(p1.xPos < 0 || p1.xPos > 1079 || p1.yPos < 0 || p1.yPos > 519 ) {
+			output = false;
+		}
 		return output;
 	}
 	
-	public Map() {
+	public Map(String player1, String player2, String terrain, int number_tanks, int life) {
+		winner = null;
+		rand = new Random();
+		n1 = rand.nextInt(1000);
+		n2 = rand.nextInt(1000);
+		n3 = rand.nextInt(1000);
+		mapgc = null;
 		destructive = false;
 		colisionX = null;
 		colisionY = null;
 		radius = null;
 		p1 = null;
-		tanks = new Tank[2];
-		tanks[0] = new Tank(100,151,1);
-		tanks[1] = new Tank(900,151,2);
+		tanks = new Tank[4];
 		x = 1080;
 		y = 520;
 		tab = new boolean[x][y];
 		flatlevel = 150;
-		if(true) {
+		if(terrain == "Flat") {
 			for(int n = 0; n < x; n++) {
 				for(int m = 0; m < y; m++) {
-					if(m <= flatlevel) tab[n][m] = true;
+					if(m <= (int)(200)) tab[n][m] = true;
 					else tab[n][m] = false;
 				}
 			}
-		/*	for(int n = 400; n < 500; n++) {
-				for(int m = 0; m < 300; m++) {
-					tab[n][m] = true;
+		}
+		if(terrain == "Mountains"){
+			for(int n = 0; n < x; n++) {
+				for(int m = 0; m < y; m++) {
+					if(m <= (int)(201 + 200*ImprovedNoise.noise((double)n/200+n1,(double)n/200+n2,(double)n/200+n3) 
+					+ 100*ImprovedNoise.noise((double)n/1000+n1,(double)n/1000+n2,(double)n/1000+n3))) tab[n][m] = true;
+					else tab[n][m] = false;
 				}
-			}*/		
+			}
 		}
-		/*if(false){	
+		if(terrain == "Hills") {
+			for(int n = 0; n < x; n++) {
+				for(int m = 0; m < y; m++) {
+					if(m <= (int)(200 + 200*ImprovedNoise.noise((double)n/1000+n1,(double)n/1000+n2,(double)n/1000+n3))) tab[n][m] = true;
+					else tab[n][m] = false;
+				}
+			}
 		}
-		if(false) {
-		}*/
+		tanks[0] = new Tank(100,life,1);
+		tanks[1] = new Tank(900,life,2);
+		tanks[2] = new Tank(300,life,1);
+		tanks[3] = new Tank(400,life,2);
+		//for(int n = 0; n < number_tanks*2; n+=2) {
+		//	tanks[n] = new Tank(40+rand.nextInt(1000),life,1);
+		//	tanks[n+1] = new Tank(40+rand.nextInt(1000),life,2);
+		//}
 	}
 	public void printmap(){
 		for(int m = y-1; m >= 0; m--){
@@ -115,28 +234,36 @@ public class Map {
 			System.out.print("\n");
 		}
 	}
-	
-	public void drawmap(Graphics2D g2d) {
+	public void drawmapbackbround() {
 		for(int m = y-1; m >= 0; m--){
 			for(int n = 0; n < x; n++){
 				if(tab[n][m] == true) {
-					g2d.setColor(Color.black);
-					g2d.fillRect(n, y - m ,1 ,1);
+					mapgc.setColor(Color.black);
+					mapgc.fillRect(n, y - m ,1 ,1);
 				}
 				if(tab[n][m] == false) {
-					g2d.setColor(Color.blue);
-					g2d.fillRect(n, y - m ,1 ,1);	
+					mapgc.setColor(Color.blue);
+					mapgc.fillRect(n, y - m ,1 ,1);	
 				}
 			}
 		}
-		for(int n = 0; n < 2; n++)	{
-			if(tanks[n].team == 1) {
+	}
+	
+	public void drawmap(Graphics2D g2d) {
+		for(Tank t : tanks)	{
+			if(t.team == 1) {
+				if(t.HP > 0) {
 				g2d.setColor(Color.red);
-				g2d.fillRect(tanks[n].xPos-5, y-4 - tanks[n].yPos ,10 ,6);
+				g2d.fillRect(t.xPos-5, y-4 - t.yPos ,10 ,6);
+				g2d.drawString(t.HP.toString(), t.xPos-10, y-10 - t.yPos);
+				}
 			}
-			if(tanks[n].team == 2) {
+			if(t.team == 2) {
+				if(t.HP > 0) {
 				g2d.setColor(Color.green);
-				g2d.fillRect(tanks[n].xPos-5, y-4 - tanks[n].yPos ,10 ,6);
+				g2d.fillRect(t.xPos-5, y-4 - t.yPos ,10 ,6);
+				g2d.drawString(t.HP.toString(), t.xPos-10, y-10 - t.yPos);
+				}
 			}
 		}
 		if(p1 != null) {

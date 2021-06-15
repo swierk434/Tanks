@@ -14,9 +14,8 @@ import javax.swing.event.ChangeListener;
 @SuppressWarnings("serial")
 public class MenuFrame extends JFrame{
 
-	GameFrame pointer;
-	String player1, player2, terrain;
-	int number_tanks, life; 
+	MenuFrame pointer;
+	GameFrame gameframe;
 	JPanel panelSetUp, panelUp, panelDown;
 	JPanel panelBlank1, panelBlank2;
 	JPanel panelTerrain;
@@ -30,21 +29,26 @@ public class MenuFrame extends JFrame{
 	JRadioButton terrain1, terrain2, terrain3;
 	TitledBorder title1;
 	Border blackline;
+	Thread t1;
 	
-	void setPointer(GameFrame g){
-		pointer = g;
-	}
-	
+	String player1, player2,terrain;  
+	int number_tanks, life;
 	
 	public MenuFrame() throws HeadlessException {
 		
-		//pointer = this;
+		
+		player1 = "player1";
+		player1 = "player2";
+		terrain = "Flat";
+		number_tanks = 3;
+		life = 100;
+		pointer = this;
 		panelSetUp  = new JPanel();
 		panelUp = new JPanel();
 		panelDown = new JPanel();
 		panelBlank1 = new JPanel();
 		panelBlank2 = new JPanel();
-		title = new JLabel("Tanks - Computer Game");
+		title = new JLabel("Tanks - Early Access    E3 Gameplay Trailer");
 		podpis1 =new JLabel("Player 1");
 		par1 = new JTextField("player1");
 		par1.setMaximumSize(new Dimension(800,50));
@@ -109,7 +113,7 @@ public class MenuFrame extends JFrame{
 		podpis5 =new JLabel("Starting tanks hit points");
 		pod5 = new JPanel();
 		pod5.add(podpis5);
-		par5 = new JSlider(JSlider.HORIZONTAL, 10, 100, 50);
+		par5 = new JSlider(JSlider.HORIZONTAL, 50, 150, 100);
 		par5.setMaximumSize(new Dimension(800,50));
 		par5.setPreferredSize(new Dimension(800,50));
 		par5.addChangeListener(new ChangeListener () {
@@ -120,11 +124,6 @@ public class MenuFrame extends JFrame{
 		});
 
 		start = new JButton("Start");
-		start.addActionListener(new ActionListener () {
-			public void actionPerformed(ActionEvent e){
-				
-			}
-		});
 		title1 = new TitledBorder("Game parameters");
 		blackline = BorderFactory.createLineBorder(Color.black);
 	
@@ -184,6 +183,15 @@ public class MenuFrame extends JFrame{
 			panelDown.add(start);
 			start.setBackground(new Color(153, 0, 153));
 			start.setSize(200, 100);
+			start.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					gameframe = new GameFrame(pointer,player1,player2,terrain,number_tanks,life);
+					gameframe.setVisible(true);	
+					t1 = new Thread(gameframe);
+					t1.start();
+					pointer.setVisible(false);
+				}
+			});	
 			
 		this.setTitle("Parametry gry");
 		this.setBackground(new Color(204, 255, 204));

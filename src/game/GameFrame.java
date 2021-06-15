@@ -15,14 +15,16 @@ import javax.swing.event.ChangeListener;
 @SuppressWarnings("serial")
 public class GameFrame extends JFrame implements Runnable{
 	
+	GameFrame pointer;
+	MenuFrame master;
 	int angleV, velocityV, ammo = 0;
 	double Vx, Vy; // Vx = Math.cos(Math.toRadians(angleV))*velocityV  Vy = Math.sin(Math.toRadians(angleV))*velocityV
 	String ammu;
 	String[] choose;
-	GameFrame pointer;
 	JMenuBar menuBar;
 	JMenu menu;
 	JMenuItem menuItem1, menuItem2, menuItem3;
+	
 	
 	JPanel panelDown;
 	JPanel movementP, velocityP, angleP, ammuP, shotP;
@@ -38,18 +40,21 @@ public class GameFrame extends JFrame implements Runnable{
 	Border blackline;
 	
 	Map map;
-
+	boolean SHOT;
 	
-	public GameFrame() throws HeadlessException {
+	public GameFrame(MenuFrame m, String player1, String player2, String terrain, int number_tanks, int life) throws HeadlessException { //t1 = new Thread(gameframe,player1,player2,terrain,number_tanks,life);
 		String[] choose = {"pierwsza", "druga", "trzecia", "czwarta"};
 		
-		map = new Map();
+		pointer = this;
+		master = m;
+		SHOT = false;
+		map = new Map(player1,player2,terrain,number_tanks,life);
 		pointer = this;
 		menuBar = new JMenuBar();
 		menu = new JMenu("Options");
 		
 		panelDown = new JPanel();
-		panelCenter = new Panel(map); //to bd panel z plansza, pewnie jako osobna klasa
+		panelCenter = new Panel(map); 
 		movementP = new JPanel();
 		velocityP = new JPanel();
 		angleP = new JPanel();
@@ -91,11 +96,20 @@ public class GameFrame extends JFrame implements Runnable{
 		
 		//menu
 		menubar = new JMenuBar();
-		menu = new JMenu("Exit");
-	//	menuitem1 = new JMenuItem("Open");
+		menu = new JMenu("Game");
+		menuitem1 = new JMenuItem("exit");
 	//	menuitem2 = new JMenuItem("Save");
-	//	menu.add(menuitem1);
+		menu.add(menuitem1);
 	//	menu.add(menuitem2);
+		menuitem1.addActionListener(new ActionListener () {
+			@SuppressWarnings("deprecation")
+			public void actionPerformed(ActionEvent e){
+				pointer.setVisible(false);
+				pointer = null;
+				master.t1.stop();
+				master.setVisible(true);
+			}
+		});
 		menubar.add(menu);
 		this.setJMenuBar(menubar);
 		
@@ -151,7 +165,7 @@ public class GameFrame extends JFrame implements Runnable{
 
 			public void itemStateChanged(ItemEvent e) {
 				ammo = ammunition.getSelectedIndex();
-				pointer.panelCenter.repaint();
+				//pointer.panelCenter.repaint();
 			}
 			
 		});
@@ -164,7 +178,7 @@ public class GameFrame extends JFrame implements Runnable{
 		shotP.add(shot);
 		shot.addActionListener(new ActionListener () {
 			public void actionPerformed(ActionEvent e){
-			
+				SHOT = true;
 			}
 		});
 		title5 = BorderFactory.createTitledBorder(blackline, "Action");
@@ -173,7 +187,7 @@ public class GameFrame extends JFrame implements Runnable{
 		
 		this.setMinimumSize(new Dimension(600, 450));
 		this.setBounds(100, 100, 1080, 720);
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setTitle("Tanks");
 		this.setPreferredSize(new Dimension(1080, 720));
 		this.setSize(1080,720);	
@@ -187,16 +201,23 @@ public class GameFrame extends JFrame implements Runnable{
 		double dt = 0.05;
 		double time;
 		int round = 0;
-		  while(round <= 10){ 
+		boolean end = false;
+		  while(round <= 10 && end == false){ 
+			 // try {
+			//	   Thread.sleep(200);
+			//   } 
+			 //  catch (InterruptedException e) {
+			//	   e.printStackTrace();
+			//   } 
+			  if(end == true) break;
 			  t = 0;
-			  //System.out.println("1");
+			//  System.out.println(round);
 			  while(t < 1000*10) {
-				  
 				   if(moveLeft.getModel().isPressed()) {
-					   map.tanks[round%2].updatePosLeft();
+					   map.tanks[round%2].moveLeft();
 				   }
 				   if(moveRight.getModel().isPressed()) {
-					   map.tanks[round%2].updatePosRight();
+					   map.tanks[round%2].moveRight();
 				   }
 				   try {
 					   Thread.sleep(20);
@@ -205,12 +226,20 @@ public class GameFrame extends JFrame implements Runnable{
 				   catch (InterruptedException e) {
 					   e.printStackTrace();
 				   }
-				   pointer.panelCenter.repaint();   
-				   if(shot.getModel().isPressed()) {
-					   map.addProjectile(map.tanks[round%2].xPos,map.tanks[round%2].yPos,Vx = Math.sin(Math.toRadians(angleV))*velocityV/3,Vy = Math.cos(Math.toRadians(angleV))*velocityV/3);
+				   try {
+				   pointer.panelCenter.repaint();  
+				   }
+				   catch(Exception e) {
+					   
+				   }
+				   if(SHOT == true) {
+					   SHOT = false;
+					   map.addProjectile(map.tanks[round%2].xPos,map.tanks[round%2].yPos,
+							   Vx = Math.sin(Math.toRadians(angleV))*velocityV/3,
+							   Vy = Math.cos(Math.toRadians(angleV))*velocityV/3);
 					   time = 0;
 					   while(map.projectileIsValid()==true) {
-						//   System.out.println(map.tanks[0].xPos + " " + map.tanks[1].xPos);
+						   //System.out.println(map.tanks[0].xPos + " " + map.tanks[1].xPos);
 						   map.p1.updatePos(time, dt);
 						   try {
 							   Thread.sleep(1);
@@ -219,11 +248,19 @@ public class GameFrame extends JFrame implements Runnable{
 						   catch (InterruptedException e) {
 							   e.printStackTrace();
 						   }
-						   pointer.panelCenter.repaint();
+						   try {
+							   pointer.panelCenter.repaint();  
+							   }
+							   catch(Exception e) {
+								   
+							   }
 					   }
+					   
 					   map.p1 = null;
-					   break;
-				   }
+					   break; //?
+				
+				   		}
+			  		}
 				   if(map.colisionX != null) {
 					   radius = 0;
 					   exp = new Explosion(1,1,true);
@@ -232,7 +269,12 @@ public class GameFrame extends JFrame implements Runnable{
 					   if(ammo == 2) exp = new Explosion(50, 10, false);
 					   if(ammo == 3) exp = new Explosion(150, 25, false);
 					   map.destructive = exp.destructive;
+					   map.damage(map.colisionX, map.colisionY, 200, exp.radius);
 					   if(exp.destructive == true) {
+						   map.removeTerrain(map.colisionX,map.colisionY, exp.radius);
+						   map.drawmapbackbround();
+						   map.fall();
+						 //  map.printmap();
 						   while(exp.radius > 0) {
 						   map.radius = exp.radius;
 						   try {
@@ -241,7 +283,12 @@ public class GameFrame extends JFrame implements Runnable{
 						   catch (InterruptedException e) {
 							   e.printStackTrace();
 						   }
-						   pointer.panelCenter.repaint();
+						   try {
+							   pointer.panelCenter.repaint();  
+							   }
+							   catch(Exception e) {
+								   
+							   }
 						   exp.radius -= exp.delay;
 						   }
 					   }
@@ -254,16 +301,27 @@ public class GameFrame extends JFrame implements Runnable{
 							   catch (InterruptedException e) {
 								   e.printStackTrace();
 							   }
-							   pointer.panelCenter.repaint();
+							   try {
+								   pointer.panelCenter.repaint();  
+								   }
+								   catch(Exception e) {
+									   
+								   }
 							   radius+=exp.delay;
 							   }
 					   }
-					   
 					   map.colisionX = null;
 					   map.colisionY = null;
+					   end = map.end();
 				   }
-			  }
-			pointer.panelCenter.repaint();
+		//	  }
+			  try {
+				   pointer.panelCenter.repaint();  
+				   }
+				   catch(Exception e) {
+					   
+				   }
+			   
 			round++;
 		  }
 	}
