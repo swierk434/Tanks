@@ -29,7 +29,7 @@ public class GameFrame extends JFrame implements Runnable{
 	JPanel panelDown;
 	JPanel movementP, velocityP, angleP, ammuP, shotP;
 	Panel panelCenter;
-	JMenuItem menuitem1, menuitem2;
+	JMenuItem menuitem1, menuitem2, menuitem3, menuitem4;
 	JMenuBar menubar;
 	JSlider velocity;
 	JSlider angle;
@@ -98,10 +98,15 @@ public class GameFrame extends JFrame implements Runnable{
 		//menu
 		menubar = new JMenuBar();
 		menu = new JMenu("Game");
-		menuitem1 = new JMenuItem("exit");
-	//	menuitem2 = new JMenuItem("Save");
+		menuitem1 = new JMenuItem("Exit");
+		//menuitem2 = new JMenuItem("Restart");
+		menuitem3 = new JMenuItem("Pause");
+		menuitem4 = new JMenuItem("Resume");
+		
 		menu.add(menuitem1);
-	//	menu.add(menuitem2);
+		//menu.add(menuitem2);
+		menu.add(menuitem3);
+		menu.add(menuitem4);
 		menuitem1.addActionListener(new ActionListener () {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e){
@@ -109,6 +114,37 @@ public class GameFrame extends JFrame implements Runnable{
 				pointer = null;
 				master.t1.stop();
 				master.setVisible(true);
+			}
+		});
+		/*menuitem2.addActionListener(new ActionListener () {
+			@SuppressWarnings("deprecation")
+			public void actionPerformed(ActionEvent e){
+				pointer.setVisible(false);
+				pointer = null;
+				master.t1.stop();
+				master.setVisible(true);
+			}
+		});*/
+		menuitem3.addActionListener(new ActionListener () {
+			@SuppressWarnings({ "removal" })
+			public void actionPerformed(ActionEvent e){
+				try {
+					master.t1.suspend();
+				}
+				catch(Exception e1) {
+					
+				}
+			}
+		});
+		menuitem4.addActionListener(new ActionListener () {
+				@SuppressWarnings({ "removal" })
+				public void actionPerformed(ActionEvent e){
+					try {
+						master.t1.resume();
+					}
+					catch(Exception e1) {
+						
+					}
 			}
 		});
 		menubar.add(menu);
