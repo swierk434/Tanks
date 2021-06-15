@@ -21,16 +21,15 @@ public class GameFrame extends JFrame implements Runnable{
 	double Vx, Vy; // Vx = Math.cos(Math.toRadians(angleV))*velocityV  Vy = Math.sin(Math.toRadians(angleV))*velocityV
 	String ammu;
 	String[] choose;
-	JMenuBar menuBar;
+	JMenuBar menubar;
 	JMenu menu;
-	JMenuItem menuItem1, menuItem2, menuItem3;
+	JMenuItem menuitem1, menuitem2, menuitem3, menuitem4;
 	
 	int number;
 	JPanel panelDown;
 	JPanel movementP, velocityP, angleP, ammuP, shotP;
 	Panel panelCenter;
-	JMenuItem menuitem1, menuitem2, menuitem3, menuitem4;
-	JMenuBar menubar;
+
 	JSlider velocity;
 	JSlider angle;
 	JButton moveLeft,moveRight,shot;
@@ -42,17 +41,15 @@ public class GameFrame extends JFrame implements Runnable{
 	Map map;
 	boolean SHOT;
 	
-	public GameFrame(MenuFrame m, String player1, String player2, String terrain, int number_tanks, int life) throws HeadlessException { //t1 = new Thread(gameframe,player1,player2,terrain,number_tanks,life);
-		String[] choose = {"pierwsza", "druga", "trzecia", "czwarta"};
+	public GameFrame(MenuFrame m, String player1, String player2, String terrain, int number_tanks, int life, Color c1, Color c2) throws HeadlessException { //t1 = new Thread(gameframe,player1,player2,terrain,number_tanks,life);
+		String[] choose = {"bum", "BUM", "BUUM", "BUUUUM"};
 		
 		number = number_tanks;
 		pointer = this;
 		master = m;
 		SHOT = false;
-		map = new Map(player1,player2,terrain,number_tanks,life);
+		map = new Map(player1,player2,terrain,number_tanks,life,c1,c2);
 		pointer = this;
-		menuBar = new JMenuBar();
-		menu = new JMenu("Options");
 		
 		panelDown = new JPanel();
 		panelCenter = new Panel(map); 
@@ -110,9 +107,9 @@ public class GameFrame extends JFrame implements Runnable{
 		menuitem1.addActionListener(new ActionListener () {
 			@SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent e){
+				master.t1.stop();
 				pointer.setVisible(false);
 				pointer = null;
-				master.t1.stop();
 				master.setVisible(true);
 			}
 		});
@@ -134,6 +131,8 @@ public class GameFrame extends JFrame implements Runnable{
 				catch(Exception e1) {
 					
 				}
+				pointer.panelCenter.repaint(); 
+				pointer.panelCenter.revalidate();
 			}
 		});
 		menuitem4.addActionListener(new ActionListener () {
@@ -145,6 +144,8 @@ public class GameFrame extends JFrame implements Runnable{
 					catch(Exception e1) {
 						
 					}
+					pointer.panelCenter.repaint(); 
+					pointer.panelCenter.revalidate();	
 			}
 		});
 		menubar.add(menu);
@@ -202,7 +203,8 @@ public class GameFrame extends JFrame implements Runnable{
 
 			public void itemStateChanged(ItemEvent e) {
 				ammo = ammunition.getSelectedIndex();
-				//pointer.panelCenter.repaint();
+				pointer.panelCenter.repaint(); 
+				pointer.panelCenter.revalidate();
 			}
 			
 		});
@@ -221,7 +223,7 @@ public class GameFrame extends JFrame implements Runnable{
 		title5 = BorderFactory.createTitledBorder(blackline, "Action");
 		title5.setTitleJustification(TitledBorder.CENTER);
 		shotP.setBorder(title5);
-		
+		this.setBackground(Color.gray);
 		this.setMinimumSize(new Dimension(600, 450));
 		this.setBounds(100, 100, 1080, 720);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -272,6 +274,7 @@ public class GameFrame extends JFrame implements Runnable{
 				   }
 				   try {
 				   pointer.panelCenter.repaint();  
+				   pointer.panelCenter.revalidate();
 				   }
 				   catch(Exception e) {
 					   
@@ -294,6 +297,7 @@ public class GameFrame extends JFrame implements Runnable{
 						   }
 						   try {
 							   pointer.panelCenter.repaint();  
+							   pointer.panelCenter.revalidate();
 							   }
 							   catch(Exception e) {
 								   
@@ -329,6 +333,7 @@ public class GameFrame extends JFrame implements Runnable{
 						   }
 						   try {
 							   pointer.panelCenter.repaint();  
+							   pointer.panelCenter.revalidate();
 							   }
 							   catch(Exception e) {
 								   
@@ -346,7 +351,8 @@ public class GameFrame extends JFrame implements Runnable{
 								   e.printStackTrace();
 							   }
 							   try {
-								   pointer.panelCenter.repaint();  
+								   pointer.panelCenter.repaint(); 
+								   pointer.panelCenter.revalidate();
 								   }
 								   catch(Exception e) {
 									   
@@ -361,7 +367,8 @@ public class GameFrame extends JFrame implements Runnable{
 					 //  if(end == false)System.out.println("FALSE");	
 				   }
 			  try {
-				   pointer.panelCenter.repaint();  
+				   pointer.panelCenter.repaint();
+				   pointer.panelCenter.revalidate();
 				   }
 				   catch(Exception e) {
 					   
@@ -370,7 +377,8 @@ public class GameFrame extends JFrame implements Runnable{
 			round++;
 		  }
 		  try {
-			   pointer.panelCenter.repaint();  
+			   pointer.panelCenter.repaint(); 
+			   pointer.panelCenter.revalidate();
 			   }
 			   catch(Exception e) {
 				   

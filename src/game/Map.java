@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.util.Random;
 
 public class Map {
+	Color color1, color2;
 	Random rand;
 	Projectile p1;
 	boolean tab[][];
@@ -185,7 +186,9 @@ public class Map {
 		return output;
 	}
 	
-	public Map(String player1, String player2, String terrain, int number_tanks, int life) {
+	public Map(String player1, String player2, String terrain, int number_tanks, int life, Color c1, Color c2) {
+		color1 = c1;
+		color2 = c2;
 		Player1 = player1;
 		Player2 = player2;
 		//System.out.println(player1 +" "+ player2);
@@ -269,14 +272,14 @@ public class Map {
 		for(Tank t : tanks)	{
 			if(t.team == 1) {
 				if(t.HP > 0) {
-				g2d.setColor(Color.red);
+				g2d.setColor(color1);
 				g2d.fillRect(t.xPos-5, y-4 - t.yPos ,10 ,6);
 				g2d.drawString(t.HP.toString(), t.xPos-10, y-10 - t.yPos);
 				}
 			}
 			if(t.team == 2) {
 				if(t.HP > 0) {
-				g2d.setColor(Color.green);
+				g2d.setColor(color2);
 				g2d.fillRect(t.xPos-5, y-4 - t.yPos ,10 ,6);
 				g2d.drawString(t.HP.toString(), t.xPos-10, y-10 - t.yPos);
 				}
@@ -288,6 +291,7 @@ public class Map {
 		}
 		if(colisionX != null && radius != null && radius > 0) {
 			if(destructive == false) {
+				
 				g2d.setColor(Color.cyan);
 				g2d.drawOval((int)colisionX-radius/2,y-radius/2-(int)colisionY,radius,radius);
 			}

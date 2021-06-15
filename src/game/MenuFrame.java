@@ -19,14 +19,15 @@ public class MenuFrame extends JFrame{
 	JPanel panelSetUp, panelUp, panelDown;
 	JPanel panelBlank1, panelBlank2;
 	JPanel panelTerrain;
-	JPanel pod5, pod4, pod3, pod2, pod1;
+	JPanel pod5, pod4, pod3, pod2, pod1, pan_clr;
 	JLabel title;
 	JLabel podpis1, podpis2;
 	JTextField par1, par2;
 	JLabel podpis3, podpis4, podpis5;
 	JSlider par4, par5;
-	JButton start;
+	JButton start, p_clr, p_bclr;
 	JRadioButton terrain1, terrain2, terrain3;
+	Color color1, color2;
 	TitledBorder title1;
 	Border blackline;
 	Thread t1;
@@ -35,6 +36,9 @@ public class MenuFrame extends JFrame{
 	int number_tanks, life;
 	
 	public MenuFrame() throws HeadlessException {
+		color1 = Color.red;
+		color2 = Color.green;
+		blackline = BorderFactory.createLineBorder(Color.black);
 		player1 = "player1";
 		player2 = "player2";
 		terrain = "Flat";
@@ -77,6 +81,39 @@ public class MenuFrame extends JFrame{
 		podpis3 = new JLabel("Terrain");
 		pod3 = new JPanel();
 		pod3.add(podpis3);
+		
+		pan_clr = new JPanel();
+		pan_clr.setBorder(blackline);
+		p_clr = new JButton("Team1 color");
+		p_clr.setBackground(Color.red);
+		p_bclr = new JButton("Team2 color");
+		p_bclr.setBackground(Color.green);
+		p_bclr.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+				try {
+				color2 = JColorChooser.showDialog(null, "Choose Color", Color.black);
+				p_bclr.setBackground(color2);
+				}
+				catch(Exception e1){
+					
+				}
+			}
+		});
+		p_clr.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent e) {
+				try {
+				color1 = JColorChooser.showDialog(null, "Choose Color", Color.WHITE);
+				p_clr.setBackground(color1);
+				}
+				catch (Exception e1) {
+					
+				}
+			}	
+		});
+		pan_clr.add(p_clr);
+		pan_clr.add(p_bclr);
+		
+		
 		///3
 			panelTerrain = new JPanel(new GridLayout(1,3));
 			panelTerrain.setMaximumSize(new Dimension(800,50));
@@ -124,7 +161,6 @@ public class MenuFrame extends JFrame{
 
 		start = new JButton("Start");
 		title1 = new TitledBorder("Game parameters");
-		blackline = BorderFactory.createLineBorder(Color.black);
 	
 		
 		///
@@ -154,9 +190,11 @@ public class MenuFrame extends JFrame{
 			panelSetUp.add(pod2);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 15)));
 			panelSetUp.add(par2);
-			panelSetUp.add(Box.createRigidArea(new Dimension(0, 30)));
-			panelSetUp.add(pod3);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 15)));
+			panelSetUp.add(pan_clr);
+			panelSetUp.add(Box.createRigidArea(new Dimension(0, 15)));
+			panelSetUp.add(pod3);
+			panelSetUp.add(Box.createRigidArea(new Dimension(0, 5)));
 			panelSetUp.add(panelTerrain);
 			panelSetUp.add(Box.createRigidArea(new Dimension(0, 30)));
 			panelSetUp.add(pod4);
@@ -184,7 +222,7 @@ public class MenuFrame extends JFrame{
 			start.setSize(200, 100);
 			start.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					gameframe = new GameFrame(pointer,par1.getText(),par2.getText(),terrain,number_tanks,life);
+					gameframe = new GameFrame(pointer, par1.getText(), par2.getText(), terrain, number_tanks, life, color1, color2);
 					gameframe.setVisible(true);	
 					t1 = new Thread(gameframe);
 					t1.start();

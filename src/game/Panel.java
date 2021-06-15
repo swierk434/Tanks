@@ -15,6 +15,7 @@ public class Panel extends JPanel {
 	
 	Panel(Map m) {
 		super();
+		//this.setBackground(Color.gray);
 		map = m;
 	}
 	
