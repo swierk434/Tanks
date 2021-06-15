@@ -35,10 +35,8 @@ public class MenuFrame extends JFrame{
 	int number_tanks, life;
 	
 	public MenuFrame() throws HeadlessException {
-		
-		
 		player1 = "player1";
-		player1 = "player2";
+		player2 = "player2";
 		terrain = "Flat";
 		number_tanks = 3;
 		life = 100;
@@ -70,6 +68,7 @@ public class MenuFrame extends JFrame{
 
 			public void actionPerformed(ActionEvent e) {
 				player2 = par2.getText();
+				System.out.println(player2);
 			}
 		});
 		
@@ -185,7 +184,7 @@ public class MenuFrame extends JFrame{
 			start.setSize(200, 100);
 			start.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					gameframe = new GameFrame(pointer,player1,player2,terrain,number_tanks,life);
+					gameframe = new GameFrame(pointer,par1.getText(),par2.getText(),terrain,number_tanks,life);
 					gameframe.setVisible(true);	
 					t1 = new Thread(gameframe);
 					t1.start();

@@ -16,6 +16,11 @@ public class Map {
 	Graphics2D mapgc;
 	Integer winner;
 	int n1, n2, n3;
+	String Player1, Player2;
+	Integer timer;
+	String timers;
+	Integer player;
+	String players;
 	
 	public class Tank {
 		int xPos, yPos, team; 
@@ -175,6 +180,11 @@ public class Map {
 	}
 	
 	public Map(String player1, String player2, String terrain, int number_tanks, int life) {
+		Player1 = player1;
+		Player2 = player2;
+		System.out.println(player1 +" "+ player2);
+		player = 1;
+		timer = 10;
 		winner = null;
 		rand = new Random();
 		n1 = rand.nextInt(1000);
@@ -186,7 +196,7 @@ public class Map {
 		colisionY = null;
 		radius = null;
 		p1 = null;
-		tanks = new Tank[4];
+		tanks = new Tank[number_tanks*2];
 		x = 1080;
 		y = 520;
 		tab = new boolean[x][y];
@@ -216,14 +226,14 @@ public class Map {
 				}
 			}
 		}
-		tanks[0] = new Tank(100,life,1);
-		tanks[1] = new Tank(900,life,2);
-		tanks[2] = new Tank(300,life,1);
-		tanks[3] = new Tank(400,life,2);
-		//for(int n = 0; n < number_tanks*2; n+=2) {
-		//	tanks[n] = new Tank(40+rand.nextInt(1000),life,1);
-		//	tanks[n+1] = new Tank(40+rand.nextInt(1000),life,2);
-		//}
+	//	tanks[0] = new Tank(100,life,1);
+	//	tanks[1] = new Tank(900,life,2);
+	//	tanks[2] = new Tank(300,life,1);
+	//	tanks[3] = new Tank(400,life,2);
+		for(int n = 0; n < number_tanks*2; n+=2) {
+			tanks[n] = new Tank(40+rand.nextInt(1000),life,1);
+			tanks[n+1] = new Tank(40+rand.nextInt(1000),life,2);
+		}
 	}
 	public void printmap(){
 		for(int m = y-1; m >= 0; m--){
@@ -279,6 +289,13 @@ public class Map {
 				g2d.setColor(Color.yellow);
 				g2d.fillOval((int)colisionX-radius/2,y-radius/2-(int)colisionY,radius,radius);
 			}	
-		}		
+		}
+		timers = "Time Left: "+ timer.toString();
+		g2d.setColor(Color.white);
+		g2d.drawString(timers, 10 , 15);
+		if(player == 1)players = "Round: "+ Player1;
+		if(player == 2)players = "Round: "+ Player2;
+		g2d.setColor(Color.white);
+		g2d.drawString(players, 10 , 30);
 	}
 }

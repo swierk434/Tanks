@@ -25,7 +25,7 @@ public class GameFrame extends JFrame implements Runnable{
 	JMenu menu;
 	JMenuItem menuItem1, menuItem2, menuItem3;
 	
-	
+	int number;
 	JPanel panelDown;
 	JPanel movementP, velocityP, angleP, ammuP, shotP;
 	Panel panelCenter;
@@ -45,6 +45,7 @@ public class GameFrame extends JFrame implements Runnable{
 	public GameFrame(MenuFrame m, String player1, String player2, String terrain, int number_tanks, int life) throws HeadlessException { //t1 = new Thread(gameframe,player1,player2,terrain,number_tanks,life);
 		String[] choose = {"pierwsza", "druga", "trzecia", "czwarta"};
 		
+		number = number_tanks;
 		pointer = this;
 		master = m;
 		SHOT = false;
@@ -202,22 +203,27 @@ public class GameFrame extends JFrame implements Runnable{
 		double time;
 		int round = 0;
 		boolean end = false;
-		  while(round <= 10 && end == false){ 
+		  while(round <= 50 && end == false){ 
 			 // try {
 			//	   Thread.sleep(200);
 			//   } 
 			 //  catch (InterruptedException e) {
 			//	   e.printStackTrace();
 			//   } 
-			  if(end == true) break;
 			  t = 0;
-			//  System.out.println(round);
+			 // System.out.println(round);
+			  map.player = (round%2) +1;
 			  while(t < 1000*10) {
+				  if(map.tanks[round%(number*2)].HP <= 0) {
+					  System.out.println(round%(number*2)+ " " +map.tanks[round%(number*2)].HP);
+					   break;
+				   }
+				  map.timer = 10 - (int)t/1000;
 				   if(moveLeft.getModel().isPressed()) {
-					   map.tanks[round%2].moveLeft();
+					   map.tanks[round%(number*2)].moveLeft();
 				   }
 				   if(moveRight.getModel().isPressed()) {
-					   map.tanks[round%2].moveRight();
+					   map.tanks[round%(number*2)].moveRight();
 				   }
 				   try {
 					   Thread.sleep(20);
@@ -234,7 +240,7 @@ public class GameFrame extends JFrame implements Runnable{
 				   }
 				   if(SHOT == true) {
 					   SHOT = false;
-					   map.addProjectile(map.tanks[round%2].xPos,map.tanks[round%2].yPos,
+					   map.addProjectile(map.tanks[round%(number*2)].xPos,map.tanks[round%(number*2)].yPos,
 							   Vx = Math.sin(Math.toRadians(angleV))*velocityV/3,
 							   Vy = Math.cos(Math.toRadians(angleV))*velocityV/3);
 					   time = 0;
@@ -257,7 +263,7 @@ public class GameFrame extends JFrame implements Runnable{
 					   }
 					   
 					   map.p1 = null;
-					   break; //?
+					   break; 
 				
 				   		}
 			  		}
@@ -313,8 +319,9 @@ public class GameFrame extends JFrame implements Runnable{
 					   map.colisionX = null;
 					   map.colisionY = null;
 					   end = map.end();
+					 //  if(end == true)System.out.println("TRUE");
+					 //  if(end == false)System.out.println("FALSE");	
 				   }
-		//	  }
 			  try {
 				   pointer.panelCenter.repaint();  
 				   }
